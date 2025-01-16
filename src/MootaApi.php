@@ -2,6 +2,8 @@
 
 namespace Moota\Moota;
 
+use Moota\Moota\Data\CreateTransactionData;
+
 class MootaApi
 {
     private static MootaApi $instance;
@@ -54,6 +56,23 @@ class MootaApi
             [
                 "name" => $tags
             ]
+        );
+    }
+
+    public static function refreshMutationNow(string $bank_id) : ?object
+    {
+        return ApiRequester::post(
+            Config::BASE_URL . \str_replace("{bank_id}", $bank_id, Config::ENDPOINT_BANK_REFRESH_MUTATION),
+            Config::$ACCESS_TOKEN
+        );
+    }
+
+    public static function createTransaction(CreateTransactionData $data) : ?object
+    {
+        return ApiRequester::post(
+            Config::BASE_URL . Config::ENDPOINT_CREATE_TRANSACTION,
+            Config::$ACCESS_TOKEN,
+            CreateTransactionData::transform()
         );
     }
 
